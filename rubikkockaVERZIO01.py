@@ -8,11 +8,20 @@ print("Kep ujrameretezese: 1920x1080")
 print("Kesz")
 hsv = cv2.cvtColor(zold, cv2.COLOR_BGR2HSV)
 
-lower_green = np.array([0, 200, 0])
-upper_green = np.array([255, 255, 255])
+lower_green = np.array([25, 189, 118])
+upper_green = np.array([95, 255, 198])
 
 mask = cv2.inRange(hsv, lower_green, upper_green)
- 
+
+contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+
+for contour in contours:
+    approx = cv2.approxPolyDP(contour, 0.01 * cv2.arcLength(contour, True), True)
+    cv2.drawContours(zold, [approx], 0, (0, 0, 0), 5)
+    x = approx.ravel()[0]
+    y = approx.ravel()[1] - 5
+
+
 
 cv2.imshow("Eredeti kep a zold oldalrol", zold)
 cv2.imshow("Mask", mask)
