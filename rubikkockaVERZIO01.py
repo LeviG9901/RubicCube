@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 zold = cv2.imread("zold.jpg")
-print("Rubik kocka zold oldala importalodik...")
+print("Rubik kocka zold oldala importalodik....")
 zold = cv2.resize(zold, (1920,1080))
 print("Kep ujrameretezese: 1920x1080")
 print("Kesz")
