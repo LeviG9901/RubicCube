@@ -17,9 +17,14 @@ contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 
 for contour in contours:
     approx = cv2.approxPolyDP(contour, 0.01 * cv2.arcLength(contour, True), True)
-    cv2.drawContours(zold, [approx], 0, (0, 0, 0), 5)
-    x = approx.ravel()[0]
-    y = approx.ravel()[1] - 5
+    area = cv2.contourArea(contour)
+    if area>10000:
+        cv2.drawContours(zold, [approx], 0, (0, 0, 0), 5)
+        x = approx.ravel()[0]
+        y = approx.ravel()[1] - 5
+        area = cv2.contourArea(contour)
+        print(area)
+
 
 
 
