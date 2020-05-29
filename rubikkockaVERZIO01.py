@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 
 zold = cv2.imread("zold.jpg")
+kocka = cv2.imread("kocka.png")
 print("Rubik kocka zold oldala importalodik....")
 zold = cv2.resize(zold, (1920,1080))
 print("Kep ujrameretezese: 1920x1080")
@@ -38,5 +39,6 @@ for cnt in contours:
 cv2.imshow("Eredeti kep a zold oldalrol", zold)
 cv2.imshow("Mask", mask)
 cv2.imshow("HSV", hsv)
+cv2.imshow("Kocka", kocka)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
