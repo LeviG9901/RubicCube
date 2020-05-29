@@ -24,6 +24,13 @@ for contour in contours:
         y = approx.ravel()[1] - 5
         area = cv2.contourArea(contour)
         print(area)
+for cnt in contours:
+    if cv2.contourArea(cnt) >10000:
+        x,y,w,h = cv2.boundingRect(cnt)
+        cv2.rectangle(zold,(x,y),(x+w,y+h),(0,255,0),2)
+        cv2.imshow('Kivagott kontur',zold[y:y+h,x:x+w])
+        print('Average color (BGR): ',np.array(cv2.mean(zold[y:y+h,x:x+w])).astype(np.uint8))
+        cv2.waitKey(0)
 
 
 
