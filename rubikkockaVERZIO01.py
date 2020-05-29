@@ -7,6 +7,7 @@ piros = cv2.imread("piros.jpg")
 sarga = cv2.imread("sarga.jpg")
 narancs = cv2.imread("narancs.jpg")
 feher = cv2.imread("feher.jpg")
+kevert = cv2.imread("kevert.png")
 oldal = cv2.imread("kocka.png")
 
 print("Rubik kocka oldalai importalodnak....")
@@ -19,32 +20,37 @@ feher = cv2.resize(feher, (1920,1080))
 print("Kep ujrameretezese: 1920x1080")
 print("Kesz")
 hsv = cv2.cvtColor(zold, cv2.COLOR_BGR2HSV)
-hsv2 = cv2.cvtColor(piros, cv2.COLOR_BGR2HSV)
-hsv3 = cv2.cvtColor(kek, cv2.COLOR_BGR2HSV)
+hsv2 = cv2.cvtColor(kek, cv2.COLOR_BGR2HSV)
+hsv3 = cv2.cvtColor(piros, cv2.COLOR_BGR2HSV)
 hsv4 = cv2.cvtColor(sarga, cv2.COLOR_BGR2HSV)
 hsv5 = cv2.cvtColor(narancs, cv2.COLOR_BGR2HSV)
 hsv6 = cv2.cvtColor(feher, cv2.COLOR_BGR2HSV)
+hsv7 = cv2.cvtColor(kevert, cv2.COLOR_BGR2HSV)
+
 szintomb = [0,0,0]
 lower_green = np.array([25, 189, 118])
 upper_green = np.array([95, 255, 198])
-lower_red = np.array([25, 189, 118])
-upper_red = np.array([95, 255, 198])
-lower_blue = np.array([25, 189, 118])
-upper_blue = np.array([95, 255, 198])
-lower_yellow = np.array([25, 189, 118])
-upper_yellow = np.array([95, 255, 198])
-lower_orange = np.array([25, 189, 118])
-upper_orange = np.array([95, 255, 198])
-lower_white = np.array([25, 189, 118])
-upper_white = np.array([95, 255, 198])
+lower_blue = np.array([100,200,0])
+upper_blue = np.array([140,255,255])
+lower_red = np.array([66,65,170])
+upper_red = np.array([200,200,240])
+lower_yellow = np.array([30,100,100])
+upper_yellow = np.array([180,230,230])
+lower_orange = np.array([40,100,170])
+upper_orange = np.array([138,180,230])
+lower_white = np.array([140,120,70])
+upper_white = np.array([255,255,255])
+
 
 mask = cv2.inRange(hsv, lower_green, upper_green)
-mask1 = cv2.inRange(hsv, lower_green, upper_green)
-mask2 = cv2.inRange(hsv, lower_green, upper_green)
-mask3 = cv2.inRange(hsv, lower_green, upper_green)
-mask4 = cv2.inRange(hsv, lower_green, upper_green)
-mask5 = cv2.inRange(hsv, lower_green, upper_green)
-mask6 = cv2.inRange(hsv, lower_green, upper_green)
+mask2 = cv2.inRange(hsv2, lower_blue, upper_blue)
+mask3 = cv2.inRange(hsv3, lower_red, upper_red)
+mask4 = cv2.inRange(hsv4, lower_yellow, upper_yellow)
+mask5 = cv2.inRange(hsv5, lower_orange, upper_orange)
+mask6 = cv2.inRange(hsv6, lower_white, upper_white)
+mask7 = cv2.inRange(hsv7, [25, 189, 118],[95, 255, 198])
+
+
 
 contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 contours2, _ = cv2.findContours(mask2, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
@@ -52,6 +58,11 @@ contours3, _ = cv2.findContours(mask3, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 contours4, _ = cv2.findContours(mask4, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 contours5, _ = cv2.findContours(mask5, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 contours6, _ = cv2.findContours(mask6, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+contours7, _ = cv2.findContours(mask7, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+
+Green = [0,128,0]
+Blue = [128,0,0]
+Red = [0,0,128]
 
 def szin(avg,szintomb):
     print("belepett a fgvbe")
@@ -60,23 +71,23 @@ def szin(avg,szintomb):
         print("zöld")
         szintomb = [0,128,0]
         return szintomb
-    if avg[0] >= 150 and avg[1] <= 150 and avg[2] <= 100:
+    elif avg[0] >= 150 and avg[1] <= 150 and avg[2] <= 100:
         print("kék")
         szintomb = [128, 0, 0]
         return szintomb
-    if avg[0] <= 100 and avg[1] <= 100 and avg[2] >= 150:
+    elif avg[0] <= 120 and avg[1] <= 110 and avg[2] >= 150:
         print("piros")
         szintomb = [0, 0, 128]
         return szintomb
-    if avg[0] <= 50 and avg[1] >= 230 and avg[2] >= 230:
+    elif avg[0] <= 50 and avg[1] >= 230 and avg[2] >= 230:
         print("sarga")
         szintomb = [255,255,0]
         return szintomb
-    if avg[0] <= 50 and avg[1] >= 200 and avg[2] >= 200:
+    elif avg[0] <= 50 and avg[1] >= 200 and avg[2] >= 200:
         print("narancs")
         szintomb = 	[255,165,0]
         return szintomb
-    if avg[0] >240  and avg[1] >240 and avg[2] > 240:
+    elif avg[0] >240  and avg[1] >240 and avg[2] > 240:
         print("feher")
         szintomb = [255, 255, 255]
         return szintomb
@@ -166,6 +177,9 @@ for cnt in contours:
         print("i:", i)
         i = i+1
 cv2.imshow("Kocka oldala színezettzold", oldal)
+cv2.imshow("Eredeti kep a zold oldalrol", zold)
+cv2.imshow("Mask", mask)
+cv2.imshow("HSV", hsv)
 print("ITT VÉGZETT A ZÖLDDEL")
 i = 0
 #kek oldal
@@ -200,8 +214,84 @@ for cnt2 in contours2:
         print("i:", i)
         i = i+1
 cv2.imshow("Kocka oldala szinezettkek", oldal)
-
-
+cv2.imshow("Eredeti kep a kek oldalrol", kek)
+cv2.imshow("Mask2", mask2)
+cv2.imshow("HSV2", hsv2)
+print("ITT VÉGZETT A KÉKKEL")
+i = 0
+#piros oldal
+for cnt3 in contours3:
+    if cv2.contourArea(cnt3) >10000:
+        print("area: ", cv2.contourArea(cnt3))
+        x,y,w,h = cv2.boundingRect(cnt3)
+        cv2.rectangle(piros,(x,y),(x+w,y+h),(0,255,0),2)
+        #cv2.imshow('Kivagott kontur',zold[y:y+h,x:x+w])
+        avg=np.array(cv2.mean(piros[y:y + h, x:x + w])).astype(np.uint8)
+        print('Average color (BGR): ',avg)
+        #cv2.imshow('Kivagott kontur1',kek[y:y+h,x:x+w])
+        #ha zöld színű a kocka a képen
+        if szin(avg,szintomb) == Green:
+            print("ebbe is belepett1")
+            kirajzoltatas(row,col,i,[0,128,0])
+        elif szin(avg,szintomb) == Blue:
+            print("ebbe is belepett2")
+            kirajzoltatas(row,col,i,[128,0,0])
+        elif szin(avg,szintomb) == Red:
+            print("ebbe is belepett3")
+            kirajzoltatas(row,col,i,[0,0,128])
+        elif szin(avg,szintomb) == [255,255,0]:
+            print("ebbe is belepett4")
+            kirajzoltatas(row,col,i,[255,255,0])
+        elif szin(avg,szintomb) == [255,165,0]:
+            print("ebbe is belepett5")
+            kirajzoltatas(row,col,i,[255,165,0])
+        elif szin(avg,szintomb) == [255, 255, 255]:
+            print("ebbe is belepett6")
+            kirajzoltatas(row,col,i,[255, 255, 255])
+        print("i:", i)
+        i = i+1
+cv2.imshow("Kocka oldala szinezettpiros", oldal)
+cv2.imshow("Eredeti kep a piros oldalrol", piros)
+cv2.imshow("Mask3", mask3)
+cv2.imshow("HSV3", hsv3)
+print("ITT VÉGZETT A PIROSSAL")
+i = 0
+#piros oldal
+for cnt4 in contours4:
+    if cv2.contourArea(cnt4) >10000:
+        print("area: ", cv2.contourArea(cnt4))
+        x,y,w,h = cv2.boundingRect(cnt4)
+        cv2.rectangle(kevert,(x,y),(x+w,y+h),(0,255,0),2)
+        #cv2.imshow('Kivagott kontur',zold[y:y+h,x:x+w])
+        avg=np.array(cv2.mean(kevert[y:y + h, x:x + w])).astype(np.uint8)
+        print('Average color (BGR): ',avg)
+        #cv2.imshow('Kivagott kontur1',kek[y:y+h,x:x+w])
+        #ha zöld színű a kocka a képen
+        if szin(avg,szintomb) == Green:
+            print("ebbe is belepett1")
+            kirajzoltatas(row,col,i,[0,128,0])
+        elif szin(avg,szintomb) == Blue:
+            print("ebbe is belepett2")
+            kirajzoltatas(row,col,i,[128,0,0])
+        elif szin(avg,szintomb) == Red:
+            print("ebbe is belepett3")
+            kirajzoltatas(row,col,i,[0,0,128])
+        elif szin(avg,szintomb) == [255,255,0]:
+            print("ebbe is belepett4")
+            kirajzoltatas(row,col,i,[255,255,0])
+        elif szin(avg,szintomb) == [255,165,0]:
+            print("ebbe is belepett5")
+            kirajzoltatas(row,col,i,[255,165,0])
+        elif szin(avg,szintomb) == [255, 255, 255]:
+            print("ebbe is belepett6")
+            kirajzoltatas(row,col,i,[255, 255, 255])
+        print("i:", i)
+        i = i+1
+cv2.imshow("Kocka oldala szinezettkevert", oldal)
+cv2.imshow("Eredeti kep a kevert oldalrol", kevert)
+cv2.imshow("Mask7", mask7)
+cv2.imshow("HSV7", hsv7)
+print("ITT VÉGZETT A KEVERTTEL")
 
 #contours2, _ = cv2.findContours(gray, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 #Régi Kontúr rajzolás (bénábbik)
@@ -214,7 +304,6 @@ cv2.imshow("Kocka oldala szinezettkek", oldal)
         y = approx.ravel()[1] - 5
         area = cv2.contourArea(contour)
         print(area)"""
-i = 0
 """#kiterített kocka képen kontúrok keresése
 for cont in contours2:
     terulet = cv2.contourArea(cont)
@@ -230,9 +319,6 @@ for cont in contours2:
         approx = cv2.approxPolyDP(cont, 0.01 * cv2.arcLength(cont, True), True)
         cv2.drawContours(kitkocka, [approx], 0, (0, 0, 255),3)"""
 
-
-avg1 = np.zeros(9)
-print(avg1)
 """i = 0
 #Megkeresi a beadott képen a középső kockának a színét, és az alapján fogja eldönteni, hogy a kiterített kockán
 #hol kell majd színezni
@@ -250,20 +336,6 @@ for cnt in contours:
 
 print(avg1)
 """
-
-
-
-
-cv2.imshow("Eredeti kep a zold oldalrol", zold)
-cv2.imshow("Mask", mask)
-cv2.imshow("HSV", hsv)
-cv2.imshow("Kocka oldala színezett", oldal)
-cv2.imshow("Eredeti kep a kek oldalrol", kek)
-cv2.imshow("Mask2", mask2)
-cv2.imshow("HSV2", hsv2)
-cv2.imshow("Eredeti kep a piros oldalrol", piros)
-cv2.imshow("Mask3", mask3)
-cv2.imshow("HSV3", hsv3)
 
 cv2.waitKey(0)
 cv2.destroyAllWindows()
