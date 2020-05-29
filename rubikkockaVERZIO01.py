@@ -19,15 +19,9 @@ narancs = cv2.resize(narancs, (1920,1080))
 feher = cv2.resize(feher, (1920,1080))
 print("Kep ujrameretezese: 1920x1080")
 print("Kesz")
-hsv = cv2.cvtColor(zold, cv2.COLOR_BGR2HSV)
-hsv2 = cv2.cvtColor(kek, cv2.COLOR_BGR2HSV)
-hsv3 = cv2.cvtColor(piros, cv2.COLOR_BGR2HSV)
-hsv4 = cv2.cvtColor(sarga, cv2.COLOR_BGR2HSV)
-hsv5 = cv2.cvtColor(narancs, cv2.COLOR_BGR2HSV)
-hsv6 = cv2.cvtColor(feher, cv2.COLOR_BGR2HSV)
-hsv7 = cv2.cvtColor(kevert, cv2.COLOR_BGR2HSV)
 
 szintomb = [0,0,0]
+
 lower_green = np.array([25, 189, 118])
 upper_green = np.array([95, 255, 198])
 lower_blue = np.array([100,200,0])
@@ -42,28 +36,33 @@ lower_white = np.array([140,120,70])
 upper_white = np.array([255,255,255])
 
 
-mask = cv2.inRange(hsv, lower_green, upper_green)
-mask2 = cv2.inRange(hsv2, lower_blue, upper_blue)
-mask3 = cv2.inRange(hsv3, lower_red, upper_red)
-mask4 = cv2.inRange(hsv4, lower_yellow, upper_yellow)
-mask5 = cv2.inRange(hsv5, lower_orange, upper_orange)
-mask6 = cv2.inRange(hsv6, lower_white, upper_white)
-mask7 = cv2.inRange(hsv7, [25, 189, 118],[95, 255, 198])
-
-
-
-contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
-contours2, _ = cv2.findContours(mask2, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
-contours3, _ = cv2.findContours(mask3, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
-contours4, _ = cv2.findContours(mask4, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
-contours5, _ = cv2.findContours(mask5, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
-contours6, _ = cv2.findContours(mask6, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
-contours7, _ = cv2.findContours(mask7, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
-
 Green = [0,128,0]
 Blue = [128,0,0]
 Red = [0,0,128]
 
+def hsv(img):
+    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    return hsv;
+def zoldmaszk(hsv):
+    mask = cv2.inRange(hsv, lower_green, upper_green)
+    return mask;
+def kekmaszk(hsv):
+    mask = cv2.inRange(hsv, lower_blue, upper_blue)
+    return mask;
+def pirosmaszk(hsv):
+    mask = cv2.inRange(hsv, lower_red, upper_red)
+    return mask;
+def sargamaszk(hsv):
+    mask = cv2.inRange(hsv, lower_yellow, upper_yellow)
+    return mask;
+def narancsmaszk(hsv):
+    mask = cv2.inRange(hsv, lower_orange, upper_orange)
+    return mask;
+def fehermaszk(hsv):
+    mask = cv2.inRange(hsv, lower_white, upper_white)
+    return mask;
+def contourdraw(mask):
+    contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 def szin(avg,szintomb):
     print("belepett a fgvbe")
     print(avg)
@@ -142,6 +141,7 @@ def kirajzoltatas(row,col, i, szintomb):
 
 
 
+"""
 i = 0
 #kocka1 kirajzoltatas
 row = np.array([0,220,234,450,464,683])
@@ -181,6 +181,8 @@ cv2.imshow("Eredeti kep a zold oldalrol", zold)
 cv2.imshow("Mask", mask)
 cv2.imshow("HSV", hsv)
 print("ITT VÉGZETT A ZÖLDDEL")
+"""
+"""
 i = 0
 #kek oldal
 for cnt2 in contours2:
@@ -295,7 +297,7 @@ print("ITT VÉGZETT A KEVERTTEL")
 
 #contours2, _ = cv2.findContours(gray, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 #Régi Kontúr rajzolás (bénábbik)
-"""for contour in contours:
+for contour in contours:
     approx = cv2.approxPolyDP(contour, 0.01 * cv2.arcLength(contour, True), True)
     area = cv2.contourArea(contour)
     if area>10000:
