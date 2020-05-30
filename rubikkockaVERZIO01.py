@@ -19,7 +19,20 @@ narancs = cv2.resize(narancs, (1920,1080))
 feher = cv2.resize(feher, (1920,1080))
 print("Kep ujrameretezese: 1920x1080")
 print("Kesz")
-
+def szin(j):
+    if j == 0:
+        return "G"
+    if j == 1:
+        return "B"
+    if j == 2:
+        return "R"
+    if j == 3:
+        return "Y"
+    if j == 4:
+        return "O"
+    if j == 5:
+        return "W"
+"""
 def szin(avg,szintomb):
     print("belepett a fgvbe")
     print("avg",avg)
@@ -47,6 +60,7 @@ def szin(avg,szintomb):
         print("feher")
         szintomb = [255, 255, 255]
         return szintomb
+"""
 """
 def kirajzoltatas(row,col, i, szintomb):
     if i == 0:
@@ -100,6 +114,7 @@ szintomb = [0,0,0]
 Green = [0,128,0]
 Blue = [128,0,0]
 Red = [0,0,128]
+Yellow = []
 
 lower_green = np.array([40, 90, 20])
 upper_green = np.array([210, 245, 200])
@@ -144,7 +159,6 @@ cszintomb=np.array([])
 for i in range(0, 12 ,2):
        mask = cv2.inRange(hsv,lowup[i],lowup[i+1])
        print("i:",i)
-       cv2.imshow("mask",mask)
        contours, _ = cv2.findContours(mask, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
        print("kontúrok:", contours)
        for cnt in contours:
@@ -203,28 +217,26 @@ for i in range (3):
 print("sortomb: ", sortomb)
 """
 
-cv2.imshow("kontúrok", kevert)
-rubikkocka1=[[],[],[],
-            [],[],[],
-            [],[],[]]
-rubikkocka2=[[],[],[],
-            [],[],[],
-            [],[],[]]
-rubikkocka3=[[],[],[],
-            [],[],[],
-            [],[],[]]
-rubikkocka4=[[],[],[],
-            [],[],[],
-            [],[],[]]
-rubikkocka5=[[],[],[],
-            [],[],[],
-            [],[],[]]
-rubikkocka6=[[],[],[],
-            [],[],[],
-            [],[],[]]
 
+o=1
+for i in range(9):
 
-
+    for j in range(3):
+        if (szin(asd[i][j])=="G"):
+            print('G',end='')
+        elif (szin(asd[i][j])=="B"):
+            print('B',end='')
+        elif (szin(asd[i][j])=="R"):
+            print('R',end='')
+        elif (szin(asd[i][j])=="Y"):
+            print('Y',end='')
+        elif (szin(asd[i][j])=="O"):
+            print('O',end='')
+        elif (szin(asd[i][j])=="W"):
+            print('W',end='')
+    if (o%3)==0:
+        print("\n")
+    o=o+1
 
 
 
