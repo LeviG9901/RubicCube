@@ -7,7 +7,7 @@ piros = cv2.imread("piros.jpg")
 sarga = cv2.imread("sarga.jpg")
 narancs = cv2.imread("narancs.jpg")
 feher = cv2.imread("feher.jpg")
-kevert = cv2.imread("kevert.png")
+kevert = cv2.imread("kevert2.png")
 oldal = cv2.imread("kocka.png")
 
 print("Rubik kocka oldalai importalodnak....")
@@ -138,7 +138,7 @@ hsv = cv2.cvtColor(kevert, cv2.COLOR_BGR2HSV)
 i = 0
 j = 0 #ez adja meg a maszk színt, éppen mit maszkol ki
 k = 0
-l = 0
+
 tomb = (6)
 cszintomb=np.array([])
 for i in range(0, 12 ,2):
@@ -149,24 +149,25 @@ for i in range(0, 12 ,2):
        print("kontúrok:", contours)
        for cnt in contours:
            if cv2.contourArea(cnt) > 10000:
+
                print("area: ", cv2.contourArea(cnt))
                x, y, w, h = cv2.boundingRect(cnt)
                cv2.rectangle(kevert, (x, y), (x + w, y + h), (0, 255, 0), 2)
                M = cv2.moments(cnt)
                print("Momment:",M)
-               """cx =(M['m10'] / M['m00'])
+               cx =(M['m10'] / M['m00'])
                print("cx:",cx)
                cy =(M['m01'] / M['m00']) 
                print("cy:", cy)
                center = np.array([cx,cy])
-               print("momentscenter:", center)"""
+               print("momentscenter:", center)
                circles = [cv2.minEnclosingCircle(cnt)]
                M2 = cv2.moments(cnt)
                print("Momment2:",M2)
-               center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
-               print("circlecenter:", center)
-               cx= int(center[0])
-               cy = int(center[1])
+               center2 = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
+               print("circlecenter:", center2)
+               cx= int(center2[0])
+               cy = int(center2[1])
                cxcyj=np.empty(3)
                cxcyj[0] = cx
                cxcyj[1] = cy
@@ -174,8 +175,6 @@ for i in range(0, 12 ,2):
                print("cxcyj:", cxcyj)
                cszintomb = np.append(cszintomb,cxcyj)
                print("cszintomb:", cszintomb)
-               #centerarray = np.array([cx, cy])
-               #print("center:",centerarray)
                avg=np.array(cv2.mean(kevert[y:y + h, x:x + w])).astype(np.uint8)
                print('Average color (BGR): ', avg)
                k = k+1
@@ -183,28 +182,46 @@ for i in range(0, 12 ,2):
        j = j + 1
 
 print("cszintomb a vegen:", cszintomb)
-print("csszintomb 1. eleme: ", cszintomb[0])
-print("csszintomb 2. eleme: ", cszintomb[1])
-print("csszintomb 3. eleme: ", cszintomb[2])
+#segedtömb segítségével csinálok ebből egy 9x3 mátrixot
+segedt = np.ndarray(shape=(9),dtype=[('x','f4'),('y','f4'),('c','f4')])
+print("segedt", segedt)
+l = 0
+for t in range(0,9):
+    for u in range(0,3):
+        segedt[t][u] = cszintomb[l]
+        l = l+1
+
+print("segedt:", segedt)
+#y koordináta szerint sorbarendezem (axis=0)
+asd = sorted(segedt, key=lambda segedt_entry: (segedt_entry[1],segedt_entry[0]))
+print("sorted:", asd)
+"""
+sortomb = np.ndarray(shape=(3,3))
+for i in range (3):
+    for j in range (3):
+        sortomb[i][j] = segedt[i][j]
+print("sortomb: ", sortomb)
+"""
+
 cv2.imshow("kontúrok", kevert)
-Rubikkocka=np.array([[[],[],[],
-                      [],[],[],
-                      [],[],[]],
-                     [[],[],[],
-                      [],[],[],
-                      [],[],[]],
-                     [[],[],[],
-                      [],[],[],
-                      [],[],[]],
-                     [[],[],[],
-                      [],[],[],
-                      [],[],[]],
-                     [[],[],[],
-                      [],[],[],
-                      [],[],[]],
-                     [[],[],[],
-                      [],[],[],
-                      [],[],[]]])
+rubikkocka1=[[],[],[],
+            [],[],[],
+            [],[],[]]
+rubikkocka2=[[],[],[],
+            [],[],[],
+            [],[],[]]
+rubikkocka3=[[],[],[],
+            [],[],[],
+            [],[],[]]
+rubikkocka4=[[],[],[],
+            [],[],[],
+            [],[],[]]
+rubikkocka5=[[],[],[],
+            [],[],[],
+            [],[],[]]
+rubikkocka6=[[],[],[],
+            [],[],[],
+            [],[],[]]
 
 
 
