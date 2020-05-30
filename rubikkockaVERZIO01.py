@@ -140,13 +140,11 @@ j = 0 #ez adja meg a maszk színt, éppen mit maszkol ki
 k = 0
 l = 0
 tomb = (6)
-cxcyj = np.empty(shape=(3,1))
 cszintomb=np.array([])
 for i in range(0, 12 ,2):
        mask = cv2.inRange(hsv,lowup[i],lowup[i+1])
        print("i:",i)
        cv2.imshow("mask",mask)
-       cv2.waitKey()
        contours, _ = cv2.findContours(mask, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
        print("kontúrok:", contours)
        for cnt in contours:
@@ -169,8 +167,13 @@ for i in range(0, 12 ,2):
                print("circlecenter:", center)
                cx= int(center[0])
                cy = int(center[1])
-               cxcyj = np.append(cx,cy,j)
-               cszintomb = np.vstack(cszintomb, cx,cy,j)
+               cxcyj=np.empty(3)
+               cxcyj[0] = cx
+               cxcyj[1] = cy
+               cxcyj[2] = j
+               print("cxcyj:", cxcyj)
+               cszintomb = np.append(cszintomb,cxcyj)
+               print("cszintomb:", cszintomb)
                #centerarray = np.array([cx, cy])
                #print("center:",centerarray)
                avg=np.array(cv2.mean(kevert[y:y + h, x:x + w])).astype(np.uint8)
@@ -179,7 +182,10 @@ for i in range(0, 12 ,2):
                print("k:", k)
        j = j + 1
 
-
+print("cszintomb a vegen:", cszintomb)
+print("csszintomb 1. eleme: ", cszintomb[0])
+print("csszintomb 2. eleme: ", cszintomb[1])
+print("csszintomb 3. eleme: ", cszintomb[2])
 cv2.imshow("kontúrok", kevert)
 Rubikkocka=np.array([[[],[],[],
                       [],[],[],
