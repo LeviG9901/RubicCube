@@ -183,7 +183,7 @@ cszintomb=np.array([])
 
 
 #ITT KELL MÓDOSÍTANI cvtCOLOR(IDE ÍRNI A KÉP NEVÉT)!!!!!!!!!!!!!!!!!!!
-hsv = cv2.cvtColor(zavart, cv2.COLOR_BGR2HSV)
+hsv = cv2.cvtColor(zavart2, cv2.COLOR_BGR2HSV)
 for i in range(0, 12 ,2):
        mask = cv2.inRange(hsv,lowup[i],lowup[i+1])
        print("i:",i)
