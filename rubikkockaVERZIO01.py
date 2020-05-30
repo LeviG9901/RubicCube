@@ -20,52 +20,9 @@ feher = cv2.resize(feher, (1920,1080))
 print("Kep ujrameretezese: 1920x1080")
 print("Kesz")
 
-szintomb = [0,0,0]
-
-lower_green = np.array([25, 189, 118])
-upper_green = np.array([95, 255, 198])
-lower_blue = np.array([100,200,0])
-upper_blue = np.array([140,255,255])
-lower_red = np.array([66,65,170])
-upper_red = np.array([200,200,240])
-lower_yellow = np.array([30,100,100])
-upper_yellow = np.array([180,230,230])
-lower_orange = np.array([40,100,170])
-upper_orange = np.array([138,180,230])
-lower_white = np.array([140,120,70])
-upper_white = np.array([255,255,255])
-
-
-Green = [0,128,0]
-Blue = [128,0,0]
-Red = [0,0,128]
-
-def hsv(img):
-    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-    return hsv;
-def zoldmaszk(hsv):
-    mask = cv2.inRange(hsv, lower_green, upper_green)
-    return mask;
-def kekmaszk(hsv):
-    mask = cv2.inRange(hsv, lower_blue, upper_blue)
-    return mask;
-def pirosmaszk(hsv):
-    mask = cv2.inRange(hsv, lower_red, upper_red)
-    return mask;
-def sargamaszk(hsv):
-    mask = cv2.inRange(hsv, lower_yellow, upper_yellow)
-    return mask;
-def narancsmaszk(hsv):
-    mask = cv2.inRange(hsv, lower_orange, upper_orange)
-    return mask;
-def fehermaszk(hsv):
-    mask = cv2.inRange(hsv, lower_white, upper_white)
-    return mask;
-def contourdraw(mask):
-    contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 def szin(avg,szintomb):
     print("belepett a fgvbe")
-    print(avg)
+    print("avg",avg)
     if avg[0] <= 200 and avg[1] >= 151 and avg[2] <= 100:
         print("zöld")
         szintomb = [0,128,0]
@@ -90,7 +47,7 @@ def szin(avg,szintomb):
         print("feher")
         szintomb = [255, 255, 255]
         return szintomb
-
+"""
 def kirajzoltatas(row,col, i, szintomb):
     if i == 0:
         print("belépett eskü")
@@ -137,8 +94,118 @@ def kirajzoltatas(row,col, i, szintomb):
         for j in range(col[4], col[5]):
             for k in range(row[4], row[5]):
                 oldal[j, k] = szintomb
+"""
+
+szintomb = [0,0,0]
+Green = [0,128,0]
+Blue = [128,0,0]
+Red = [0,0,128]
+
+lower_green = np.array([40, 90, 20])
+upper_green = np.array([210, 245, 200])
+lower_blue = np.array([60,20,15])
+upper_blue = np.array([245,180,170])
+lower_red = np.array([20,10,140])
+upper_red = np.array([160,160,248])
+lower_yellow = np.array([30,100,100])
+upper_yellow = np.array([180,230,230])
+lower_orange = np.array([40,100,170])
+upper_orange = np.array([138,180,230])
+lower_white = np.array([140,120,70])
+upper_white = np.array([255,255,255])
 
 
+def függvény(lowup):
+    for i in range(0, 6, 2):
+        mask = cv2.inRange(hsv, lowup[i], lowup[i + 1])
+        return mask
+
+
+lowup =np.array ([[42,55,60],
+                 [93, 255, 255],
+                 [51,51,51],
+                 [178,186,215],
+                 [125,0,0],
+                 [255,255,255],
+                 [0,255,255],
+                 [255,255,255],
+                 [0,179,255],
+                 [255,230,255],
+                 [0,0,255],
+                 [0,255,255]])
+print(lowup[0])
+hsv = cv2.cvtColor(kevert, cv2.COLOR_BGR2HSV)
+i = 0
+j = 0 #ez adja meg a maszk színt, éppen mit maszkol ki
+k = 0
+l = 0
+tomb = (6)
+cxcyj = np.empty(shape=(3,1))
+cszintomb=np.array([])
+for i in range(0, 12 ,2):
+       mask = cv2.inRange(hsv,lowup[i],lowup[i+1])
+       print("i:",i)
+       cv2.imshow("mask",mask)
+       cv2.waitKey()
+       contours, _ = cv2.findContours(mask, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
+       print("kontúrok:", contours)
+       for cnt in contours:
+           if cv2.contourArea(cnt) > 10000:
+               print("area: ", cv2.contourArea(cnt))
+               x, y, w, h = cv2.boundingRect(cnt)
+               cv2.rectangle(kevert, (x, y), (x + w, y + h), (0, 255, 0), 2)
+               M = cv2.moments(cnt)
+               print("Momment:",M)
+               """cx =(M['m10'] / M['m00'])
+               print("cx:",cx)
+               cy =(M['m01'] / M['m00']) 
+               print("cy:", cy)
+               center = np.array([cx,cy])
+               print("momentscenter:", center)"""
+               circles = [cv2.minEnclosingCircle(cnt)]
+               M2 = cv2.moments(cnt)
+               print("Momment2:",M2)
+               center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
+               print("circlecenter:", center)
+               cx= int(center[0])
+               cy = int(center[1])
+               cxcyj = np.append(cx,cy,j)
+               cszintomb = np.vstack(cszintomb, cx,cy,j)
+               #centerarray = np.array([cx, cy])
+               #print("center:",centerarray)
+               avg=np.array(cv2.mean(kevert[y:y + h, x:x + w])).astype(np.uint8)
+               print('Average color (BGR): ', avg)
+               k = k+1
+               print("k:", k)
+       j = j + 1
+
+
+cv2.imshow("kontúrok", kevert)
+Rubikkocka=np.array([[[],[],[],
+                      [],[],[],
+                      [],[],[]],
+                     [[],[],[],
+                      [],[],[],
+                      [],[],[]],
+                     [[],[],[],
+                      [],[],[],
+                      [],[],[]],
+                     [[],[],[],
+                      [],[],[],
+                      [],[],[]],
+                     [[],[],[],
+                      [],[],[],
+                      [],[],[]],
+                     [[],[],[],
+                      [],[],[],
+                      [],[],[]]])
+
+
+
+
+
+
+#Kevert kocka oldalon (zöld,kék,piros színekkel) felismerés
 
 
 """
