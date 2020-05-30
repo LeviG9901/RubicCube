@@ -7,7 +7,8 @@ piros = cv2.imread("piros.jpg")
 sarga = cv2.imread("sarga.jpg")
 narancs = cv2.imread("narancs.jpg")
 feher = cv2.imread("feher.jpg")
-kevert = cv2.imread("kevert3.png")
+zavart = cv2.imread("zavarotenyezok01.jpg")
+zavart2 = cv2.imread("zavarotenyezok02.jpg")
 
 
 
@@ -19,6 +20,8 @@ kek = cv2.resize(kek, (1920,1080))
 sarga = cv2.resize(sarga, (1920,1080))
 narancs = cv2.resize(narancs, (1920,1080))
 feher = cv2.resize(feher, (1920,1080))
+zavart = cv2.resize(feher, (1920,1080))
+zavart2 = cv2.resize(feher, (1920,1080))
 print("Kep ujrameretezese: 1920x1080")
 print("Kesz")
 
@@ -180,7 +183,7 @@ cszintomb=np.array([])
 
 
 #ITT KELL MÓDOSÍTANI cvtCOLOR(IDE ÍRNI A KÉP NEVÉT)!!!!!!!!!!!!!!!!!!!
-hsv = cv2.cvtColor(zold, cv2.COLOR_BGR2HSV)
+hsv = cv2.cvtColor(zavart, cv2.COLOR_BGR2HSV)
 for i in range(0, 12 ,2):
        mask = cv2.inRange(hsv,lowup[i],lowup[i+1])
        print("i:",i)
