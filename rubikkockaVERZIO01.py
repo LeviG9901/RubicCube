@@ -173,7 +173,7 @@ lowup =np.array ([[42,55,60],
                  [63,255,255],
                  [62,0,130],
                  [255,255,255]])
-print(lowup[0])
+#print(lowup[0])
 
 i = 0
 j = 0 #ez adja meg a maszk színt, éppen mit maszkol ki
@@ -183,16 +183,17 @@ cszintomb=np.array([])
 
 
 #ITT KELL MÓDOSÍTANI cvtCOLOR(IDE ÍRNI A KÉP NEVÉT)!!!!!!!!!!!!!!!!!!!
-hsv = cv2.cvtColor(zavart2, cv2.COLOR_BGR2HSV)
+hsv = cv2.cvtColor(kek, cv2.COLOR_BGR2HSV)
 for i in range(0, 12 ,2):
        mask = cv2.inRange(hsv,lowup[i],lowup[i+1])
-       print("i:",i)
-       print("j:",j)
+       #print("i:",i)
+       #print("j:",j)
        contours, _ = cv2.findContours(mask, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
        for cnt in contours:
            if cv2.contourArea(cnt) > 10000:
                x, y, w, h = cv2.boundingRect(cnt)
-               cv2.rectangle(kevert, (x, y), (x + w, y + h), (0, 255, 0), 2)
+               # ITT KELL MÓDOSÍTANI rectangle(IDE ÍRNI A KÉP NEVÉT)!!!!!!!!!!!!!!!!!!!
+               cv2.rectangle(kek, (x, y), (x + w, y + h), (0, 255, 0), 2)
                #M = cv2.moments(cnt)
                #print("Momment:",M)
                #cx =(M['m10'] / M['m00'])
@@ -214,27 +215,25 @@ for i in range(0, 12 ,2):
                cxcyj[2] = j
                #print("cxcyj:", cxcyj)
                cszintomb = np.append(cszintomb,cxcyj)
-               print("cszintomb:", cszintomb)
-               avg=np.array(cv2.mean(kevert[y:y + h, x:x + w])).astype(np.uint8)
-               #print('Average color (BGR): ', avg)
+               #print("cszintomb:", cszintomb)
                k = k+1
-               print("k:", k)
+               #print("k:", k)
        j = j + 1
 
-print("cszintomb a vegen:", cszintomb)
+#print("cszintomb a vegen:", cszintomb)
 #segedtömb segítségével csinálok ebből egy 9x3 mátrixot
 segedt = np.ndarray(shape=(9),dtype=[('x','f4'),('y','f4'),('c','f4')])
-print("segedt", segedt)
+#print("segedt", segedt)
 l = 0
 for t in range(0,9):
     for u in range(0,3):
         segedt[t][u] = cszintomb[l]
         l = l+1
 
-print("segedt:", segedt)
+#print("segedt:", segedt)
 #y koordináta szerint sorbarendezem (axis=0)
 asd = sorted(segedt, key=lambda segedt_entry: (segedt_entry[1],segedt_entry[0]))
-print("sorted:", asd)
+#print("sorted:", asd)
 """
 sortomb = np.ndarray(shape=(3,3))
 for i in range (3):
